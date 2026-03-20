@@ -34,21 +34,6 @@ let mailTransporter =
         }
     );
 
-let mailDetails = {
-    from:process.env.EMAIL_USER,
-        to: "garvikapoor2021@gmail.com",
-        replyTo: email,
-        subject: "New Contact Form Submission",
-        html: `
-          <h2>New Lead Received</h2>
-          <p><b>Name:</b> ${name}</p>
-          <p><b>Email:</b> ${email}</p>
-          <p><b>Phone:</b> ${phone}</p>
-          <p><b>Course:</b> ${course}</p>
-          <p><b>Message:</b> ${message}</p>
-        `,
-      
-};
 
 mailTransporter
     .sendMail(mailDetails,
@@ -68,6 +53,21 @@ app.post('/contact', async (req, res)=>{
     }
     const newUser = new User(req.body);
     await newUser.save();
+let mailDetails = {
+    from:process.env.EMAIL_USER,
+        to: "garvikapoor2021@gmail.com",
+        replyTo: email,
+        subject: "New Contact Form Submission",
+        html: `
+          <h2>New Lead Received</h2>
+          <p><b>Name:</b> ${name}</p>
+          <p><b>Email:</b> ${email}</p>
+          <p><b>Phone:</b> ${phone}</p>
+          <p><b>Course:</b> ${course}</p>
+          <p><b>Message:</b> ${message}</p>
+        `,
+      
+};
 
      
     res.status(200).json({message:"Data Saved Successfully"});
