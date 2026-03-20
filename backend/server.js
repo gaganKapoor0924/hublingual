@@ -41,6 +41,8 @@ app.post('/contact', async (req, res)=>{
     await newUser.save();
 
      try {
+      console.log("📧 Trying to send email...");
+
       await transporter.sendMail({
         from:process.env.EMAIL_USER,
         to: "garvikapoor2021@gmail.com",
