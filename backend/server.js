@@ -35,15 +35,6 @@ let mailTransporter =
     );
 
 
-mailTransporter
-    .sendMail(mailDetails,
-        function (err, data) {
-            if (err) {
-                console.log('Error Occurs');
-            } else {
-                console.log('Email sent successfully');
-            }
-        });
 
 app.post('/contact', async (req, res)=>{
   try {
@@ -68,6 +59,16 @@ let mailDetails = {
         `,
       
 };
+mailTransporter
+    .sendMail(mailDetails,
+        function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+            }
+        });
+
 
      
     res.status(200).json({message:"Data Saved Successfully"});
