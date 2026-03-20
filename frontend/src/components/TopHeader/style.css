@@ -1,0 +1,19 @@
+.top_header{
+  background:#00677a;
+  padding:10px 0;
+  display: flex;
+  justify-content: center;
+  width:100%;
+  .top_container{
+    width:90%;
+    display: flex;
+    justify-content: space-between;
+    h2{
+      color:#fff;
+      font-size: 18px;
+    }
+    p{
+      color:#fff;
+    }
+  } 
+}
