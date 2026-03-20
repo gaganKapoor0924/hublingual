@@ -23,13 +23,13 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "garvikapoor2021@gmail.com", // your gmail
-    pass: "rhff vhsk woyc fssn",   // app password
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.EMAIL_USER, // your gmail
+//     pass: process.env.EMAIL_PASS,   // app password
+//   },
+// });
 
 app.post('/contact', async (req, res)=>{
   try {
@@ -40,21 +40,25 @@ app.post('/contact', async (req, res)=>{
     const newUser = new User(req.body);
     await newUser.save();
 
-     await transporter.sendMail({
-      from: "garvikapoor2021@gmail.com",
-      to: "garvikapoor2021@gmail.com",
-      replyTo:email,
-      subject: "New Contact Form Submission",
-
-      html: `
-        <h2>New Lead Received</h2>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Phone:</b> ${phone}</p>
-        <p><b>Course:</b> ${course}</p>
-        <p><b>Message:</b> ${message}</p>
-      `,
-    });
+     try {
+      await transporter.sendMail({
+        from:process.env.EMAIL_USER,
+        to: "garvikapoor2021@gmail.com",
+        replyTo: email,
+        subject: "New Contact Form Submission",
+        html: `
+          <h2>New Lead Received</h2>
+          <p><b>Name:</b> ${name}</p>
+          <p><b>Email:</b> ${email}</p>
+          <p><b>Phone:</b> ${phone}</p>
+          <p><b>Course:</b> ${course}</p>
+          <p><b>Message:</b> ${message}</p>
+        `,
+      });
+      console.log("Email Sent ✅");
+    } catch (emailError) {
+      console.log("❌ Email Error:", emailError);
+    }
     res.status(200).json({message:"Data Saved Successfully"});
   } catch (error) {
     res.status(500).json({message:"Error saving data"});
