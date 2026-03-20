@@ -23,32 +23,19 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
+let mailTransporter =
+    nodemailer.createTransport(
+        {
+            service: 'gmail',
+             auth: {
     user: process.env.EMAIL_USER, // your gmail
     pass: process.env.EMAIL_PASS,   // app password
-  },tls: {
-    rejectUnauthorized: false,
-  },
-});
+  }
+        }
+    );
 
-app.post('/contact', async (req, res)=>{
-  try {
-    const { name, email, phone, course, message } = req.body;
-    if(!name || !email || !phone || !course || !message){
-      return res.status(400).json({message:"All fields are required"});
-    }
-    const newUser = new User(req.body);
-    await newUser.save();
-
-     try {
-      console.log("📧 Trying to send email...");
-
-      await transporter.sendMail({
-        from:process.env.EMAIL_USER,
+let mailDetails = {
+    from:process.env.EMAIL_USER,
         to: "garvikapoor2021@gmail.com",
         replyTo: email,
         subject: "New Contact Form Submission",
@@ -60,11 +47,29 @@ app.post('/contact', async (req, res)=>{
           <p><b>Course:</b> ${course}</p>
           <p><b>Message:</b> ${message}</p>
         `,
-      });
-      console.log("Email Sent ✅");
-    } catch (emailError) {
-      console.log("❌ Email Error:", emailError);
+      
+};
+
+mailTransporter
+    .sendMail(mailDetails,
+        function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+            }
+        });
+
+app.post('/contact', async (req, res)=>{
+  try {
+    const { name, email, phone, course, message } = req.body;
+    if(!name || !email || !phone || !course || !message){
+      return res.status(400).json({message:"All fields are required"});
     }
+    const newUser = new User(req.body);
+    await newUser.save();
+
+     
     res.status(200).json({message:"Data Saved Successfully"});
   } catch (error) {
     res.status(500).json({message:"Error saving data"});
