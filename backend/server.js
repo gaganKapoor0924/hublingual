@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://garvikapoor2021_db_user:YJ9639dK43EIzglN@cluster0.c1jco4s.mongodb.net/institute?appName=Cluster0')
+mongoose.connect(process.env.MONGO_URI)
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -67,9 +67,9 @@ app.post('/contact', async (req, res)=>{
   }
 })
 
+const PORT = process.env.PORT || 3001;
 
 
-
-app.listen(3001, ()=>{
+app.listen(PORT, ()=>{
   console.log("Server is started");
 })
